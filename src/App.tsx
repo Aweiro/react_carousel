@@ -67,7 +67,13 @@ class App extends React.Component<{}, State> {
           min="1"
           max={images.length}
           defaultValue={currentStep}
-          onChange={e => this.setState({ currentStep: +e.target.value })}
+          onChange={e => {
+            const val = Number(e.target.value);
+
+            this.setState({
+              currentStep: Math.min(Math.max(1, val), images.length),
+            });
+          }}
         />
 
         <label htmlFor="frameId">frameSize</label>
@@ -77,7 +83,13 @@ class App extends React.Component<{}, State> {
           min="1"
           max={images.length}
           defaultValue={currentSize}
-          onChange={e => this.setState({ currentSize: +e.target.value })}
+          onChange={e => {
+            const val = Number(e.target.value);
+
+            this.setState({
+              currentSize: Math.min(Math.max(1, val), images.length),
+            });
+          }}
         />
 
         <label htmlFor="itemId">itemWidth</label>
@@ -86,7 +98,11 @@ class App extends React.Component<{}, State> {
           type="number"
           min="1"
           defaultValue={itemWidth}
-          onChange={e => this.setState({ itemWidth: +e.target.value })}
+          onChange={e => {
+            const val = Number(e.target.value);
+
+            this.setState({ itemWidth: Math.max(1, val) });
+          }}
         />
 
         <label htmlFor="animationDuration">Animation Duration</label>
@@ -95,7 +111,11 @@ class App extends React.Component<{}, State> {
           type="number"
           min="1"
           defaultValue={currentDuration}
-          onChange={e => this.setState({ currentDuration: +e.target.value })}
+          onChange={e => {
+            const val = Number(e.target.value);
+
+            this.setState({ currentDuration: Math.max(1, val) });
+          }}
         />
 
         <label htmlFor="isInfinite">Infinite</label>

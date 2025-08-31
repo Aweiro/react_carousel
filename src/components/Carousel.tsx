@@ -12,14 +12,16 @@ interface Props {
 
 const Carousel: React.FC<Props> = ({
   images,
-  step,
-  itemWidth,
-  frameSize,
-  animationDuration,
-  infinite,
+  step = 3,
+  itemWidth = 130,
+  frameSize = 3,
+  animationDuration = 1000,
+  infinite = false,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const size = frameSize * itemWidth;
+  const effectiveStep = Math.min(step, images.length);
+  const effectiveFrameSize = Math.min(frameSize, images.length);
 
   return (
     <div className="Carousel" style={{ width: `${size}px` }}>
@@ -44,20 +46,20 @@ const Carousel: React.FC<Props> = ({
 
       <button
         type="button"
-        disabled={currentIndex <= 0 && infinite !== true}
+        disabled={!infinite && currentIndex <= 0}
         onClick={e => {
           e.preventDefault();
           if (infinite) {
             if (currentIndex <= 0) {
-              setCurrentIndex(images.length - frameSize);
+              setCurrentIndex(images.length - effectiveFrameSize);
             } else {
-              setCurrentIndex(currentIndex - step);
+              setCurrentIndex(currentIndex - effectiveStep);
             }
           } else {
-            if (currentIndex - frameSize < 0) {
+            if (currentIndex - effectiveFrameSize < 0) {
               setCurrentIndex(0);
             } else {
-              setCurrentIndex(currentIndex - step);
+              setCurrentIndex(currentIndex - effectiveStep);
             }
           }
         }}
@@ -68,21 +70,27 @@ const Carousel: React.FC<Props> = ({
         type="button"
         data-cy="next"
         disabled={
-          currentIndex + frameSize >= images.length && infinite !== true
+          !infinite && currentIndex + effectiveFrameSize >= images.length
         }
         onClick={e => {
           e.preventDefault();
           if (infinite) {
-            if (currentIndex >= images.length - frameSize) {
+            if (currentIndex >= images.length - effectiveFrameSize) {
               setCurrentIndex(0);
             } else {
               setCurrentIndex(
-                Math.min(currentIndex + step, images.length - frameSize),
+                Math.min(
+                  currentIndex + effectiveStep,
+                  images.length - effectiveFrameSize,
+                ),
               );
             }
           } else {
             setCurrentIndex(
-              Math.min(currentIndex + step, images.length - frameSize),
+              Math.min(
+                currentIndex + effectiveStep,
+                images.length - effectiveFrameSize,
+              ),
             );
           }
         }}
